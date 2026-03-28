@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-      <link rel="icon" type="image/png" href="logo/meu-logo-albastru-fara-scris.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MEU Timișoara 2026 — Delegate Awards</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -861,7 +860,7 @@
 <section id="screen-intro" class="screen active">
   <div class="top-bar">
     <span class="logo-mark">MEU Timișoara 2026</span>
-    <a class="back-site-link" href="https://meutm.github.io/meu-timisoara/" target="_blank">
+    <a class="back-site-link" href="https://meutm.github.io" target="_blank">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M5 2H2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V7M7 1h4m0 0v4m0-4L5 7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Main Website
     </a>
@@ -1371,7 +1370,7 @@ async function submitVote() {
     await fetch(APPS_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload)
     });
   } catch(e) {}
@@ -1425,99 +1424,106 @@ async function loadDashboard() {
 }
 
 function renderDashboard(data) {
-  document.getElementById('total-votes-display').textContent = data.totalVotes ?? '—';
+  try {
+    document.getElementById('total-votes-display').textContent = data.totalVotes ?? '—';
 
-  if (data.lastVote) {
-    const dt = new Date(data.lastVote);
-    document.getElementById('last-vote-time').textContent =
-      `Last ballot: ${dt.toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})} at ${dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`;
-  } else {
-    document.getElementById('last-vote-time').textContent = 'No votes recorded yet.';
-  }
+    if (data.lastVote) {
+      const dt = new Date(data.lastVote);
+      document.getElementById('last-vote-time').textContent =
+        `Last ballot: ${dt.toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})} at ${dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`;
+    } else {
+      document.getElementById('last-vote-time').textContent = 'No votes recorded yet.';
+    }
 
-  const grid = document.getElementById('dashboard-content');
-  grid.innerHTML = '';
+    const grid = document.getElementById('dashboard-content');
+    grid.innerHTML = '';
 
-  // Destroy old charts
-  Chart.helpers.each(Chart.instances, c => c.destroy());
+    // Fix Chart.js 4 — Chart.helpers.each was removed
+    Object.values(Chart.instances).forEach(c => c.destroy());
 
-  QUESTIONS.forEach(q => {
-    const key   = `${String(q.num).padStart(2,'0')}. ${q.label}`;
-    const raw   = (data.stats || {})[key] || [];
-    const card  = document.createElement('div');
-    card.className = 'chart-card';
+    QUESTIONS.forEach(q => {
+      const key = `${String(q.num).padStart(2,'0')}. ${q.label}`;
+      const raw = (data.stats || {})[key] || [];
+      const card = document.createElement('div');
+      card.className = 'chart-card';
 
-    const leader = raw.length ? raw[0][0] : null;
-    const leaderTag = leader
-      ? `<div class="leader-tag">Leading: ${leader.length > 40 ? leader.substring(0,38)+'…' : leader}</div>`
-      : '';
+      const leader = raw.length ? raw[0][0] : null;
+      const leaderTag = leader
+        ? `<div class="leader-tag">Leading: ${leader.length > 40 ? leader.substring(0,38)+'…' : leader}</div>`
+        : '';
 
-    card.innerHTML = `
-      <div class="chart-card-num">Category ${q.num}</div>
-      <div class="chart-card-title">${q.label}</div>
-      ${leaderTag}
-      ${raw.length
-        ? `<div class="chart-wrapper"><canvas id="chart-${q.id}"></canvas></div>`
-        : `<div class="no-votes">No votes recorded for this category.</div>`
-      }
-    `;
-    grid.appendChild(card);
+      card.innerHTML = `
+        <div class="chart-card-num">Category ${q.num}</div>
+        <div class="chart-card-title">${q.label}</div>
+        ${leaderTag}
+        ${raw.length
+          ? `<div class="chart-wrapper"><canvas id="chart-${q.id}"></canvas></div>`
+          : `<div class="no-votes">No votes recorded for this category.</div>`
+        }
+      `;
+      grid.appendChild(card);
 
-    if (raw.length) {
-      const display = raw.slice(0, 10);
-      const labels  = display.map(([name]) => name.length > 28 ? name.substring(0,26)+'…' : name);
-      const values  = display.map(([,cnt]) => cnt);
-      const maxV    = Math.max(...values);
+      if (raw.length) {
+        const display = raw.slice(0, 10);
+        const labels  = display.map(([name]) => name.length > 28 ? name.substring(0,26)+'…' : name);
+        const values  = display.map(([,cnt]) => cnt);
+        const maxV    = Math.max(...values);
 
-      new Chart(document.getElementById(`chart-${q.id}`), {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [{
-            data: values,
-            backgroundColor: values.map(v =>
-              v === maxV ? 'rgba(196,151,58,0.85)' : 'rgba(196,151,58,0.25)'
-            ),
-            borderColor: values.map(v =>
-              v === maxV ? 'rgba(196,151,58,1)' : 'rgba(196,151,58,0.4)'
-            ),
-            borderWidth: 1,
-            borderRadius: 2,
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: ctx => ` ${ctx.parsed.x} vote${ctx.parsed.x !== 1 ? 's' : ''}`
-              },
-              backgroundColor: '#162340',
-              borderColor: 'rgba(196,151,58,0.4)',
+        new Chart(document.getElementById(`chart-${q.id}`), {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [{
+              data: values,
+              backgroundColor: values.map(v =>
+                v === maxV ? 'rgba(196,151,58,0.85)' : 'rgba(196,151,58,0.25)'
+              ),
+              borderColor: values.map(v =>
+                v === maxV ? 'rgba(196,151,58,1)' : 'rgba(196,151,58,0.4)'
+              ),
               borderWidth: 1,
-              titleColor: '#c4973a',
-              bodyColor: '#b8bece',
-            }
+              borderRadius: 2,
+            }]
           },
-          scales: {
-            x: {
-              ticks: { color: '#6b7a96', font: { family: 'Jost', size: 11 }, stepSize: 1 },
-              grid:  { color: 'rgba(196,151,58,0.06)' },
-              border:{ color: 'rgba(196,151,58,0.15)' },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => ` ${ctx.parsed.x} vote${ctx.parsed.x !== 1 ? 's' : ''}`
+                },
+                backgroundColor: '#162340',
+                borderColor: 'rgba(196,151,58,0.4)',
+                borderWidth: 1,
+                titleColor: '#c4973a',
+                bodyColor: '#b8bece',
+              }
             },
-            y: {
-              ticks: { color: '#b8bece', font: { family: 'Jost', size: 11, weight: '300' } },
-              grid:  { display: false },
-              border:{ color: 'rgba(196,151,58,0.15)' },
+            scales: {
+              x: {
+                ticks: { color: '#6b7a96', font: { family: 'Jost', size: 11 }, stepSize: 1 },
+                grid:  { color: 'rgba(196,151,58,0.06)' },
+                border:{ color: 'rgba(196,151,58,0.15)' },
+              },
+              y: {
+                ticks: { color: '#b8bece', font: { family: 'Jost', size: 11, weight: '300' } },
+                grid:  { display: false },
+                border:{ color: 'rgba(196,151,58,0.15)' },
+              }
             }
           }
-        }
-      });
-    }
-  });
+        });
+      }
+    });
+  } catch(err) {
+    document.getElementById('dashboard-content').innerHTML =
+      `<div class="loading-state" style="grid-column:1/-1; color:#e07070;">
+        <span>Error rendering dashboard: ${err.message}</span>
+       </div>`;
+  }
 }
 
 // ════════════════════════════════════════════════════
