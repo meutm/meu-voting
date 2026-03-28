@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="logo/meu-logo-albastru-fara-scris.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MEU Timișoara 2026 — Delegate Awards</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1045,99 +1044,84 @@
 const APPS_URL = "https://script.google.com/macros/s/AKfycbxZ7PSsUUF0aYvcHmaIjHruaBnMEDVNspkezMsXTA0EKJZlmAkX6AuNyPj3aPdf8_k-Zg/exec";
 
 // ── Data ──────────────────────────────────────────────
+// 53 participanți — ordine alfabetică verificată
 const ALL_PARTICIPANTS = [
-  "Albin Mixhati","Aleksandra Angelova","Alexandru Butaru",
-  "Alina Alexandru","Ana Jovancic","Arabella Maria Lavenziana",
+  "Albin Mixhati","Aleksandra Angelova","Alexandra Cazan","Alexandru Butaru",
+  "Alina Alexandru","Ana Jovancic","Andreea Potorac","Arabella Maria Lavenziana",
   "Bartosz Szybiak","Bibiana Shanks-Davison","Caterina Cavion",
-  "Cătălin Gutium","Daniel Nunes","Daniel Tielas",
-  "Darius Shahheydari","David Ionuț Dumitru","Diana Georgiana Barău",
-  "Elodie Michel","Elleonore Nohan","Emma Guillen",
-  "Eric Moraru","Felix Moore","Ferran Fuentes Romero",
-  "Giuseppe de Vincenzo","Jules Breant","Karina Lupas",
-  "Leonardo Cutelle","Letizia Bianchi","Llorenc Hinajeros Tejero",
-  "Lorena Gomez Rubiato","Luca Ciubotaru","Maksymilian Machura",
-  "Marina Petrescu","Matheo Pauwels","Mateusz Mielcarz",
-  "Matthew Murnaghan","Maxence Bouhours","Michalina Rosin",
-  "Miruna Cornescu","Nicoleta Patrasco","Nikola Zak",
-  "Nuno Costa","Olaf Piasta","Priam Llalla",
-  "Raluca Constantinovici","Raluca Panaite","Roberta Parrella",
-  "Rodrigo Moreira","Ruben Lopez Garcia","Sawa Takahashi",
-  "Sergio Perez Lopez","Stefanjia Labroska","Timotej Pustaj",
-  "Vitor Andrade Andre","Viviana Eva Zaharia"
-].sort();
+  "Daniel Nunes","Daniel Tielas","Darius Shahheydari","David Ionuț Dumitru",
+  "Diana Georgiana Barău","Elleonore Nohan","Elodie Michel","Emma Guillen",
+  "Eric Moraru","Felix Moore","Ferran Fuentes Romero","Giuseppe de Vincenzo",
+  "Jules Breant","Karina Lupas","Leonardo Cutelle","Letizia Bianchi",
+  "Llorenc Hinajeros Tejero","Lorena Gomez Rubiato","Luca Ciubotaru",
+  "Maksymilian Machura","Marina Petrescu","Mateusz Mielcarz","Matheo Pauwels",
+  "Matthew Murnaghan","Maxence Bouhours","Michalina Rosin","Miruna Cornescu",
+  "Nikola Zak","Nuno Costa","Olaf Piasta","Priam Llalla",
+  "Raluca Constantinovici","Raluca Panaite","Roberta Parrella","Rodrigo Moreira",
+  "Ruben Lopez Garcia","Sawa Takahashi","Sergio Perez Lopez","Stefanjia Labroska",
+  "Timotej Pustaj","Vitor Andrade Andre","Viviana Eva Zaharia"
+];
 
+// 26 MEP-uri — ordine alfabetică
 const MEPS = [
-  "Raluca Panaite — Renew Estonia",
-  "Luca Ciubotaru — PfE Italy",
-  "Karina Lupas — S&D Spain",
-  "Darius Shahheydari — EPP Poland",
-  "Viviana Eva Zaharia — S&D Portugal",
-  "Diana Georgiana Barău — S&D Sweden",
+  "Aleksandra Angelova — EPP Croatia",
   "Alexandra Cazan — Greens Greece",
+  "Ana Jovancic — EPP Ireland",
   "Arabella Maria Lavenziana — ECR Poland",
-  "Eric Moraru — ESN Germany",
-  "Elodie Michel — PfE Hungary",
-  "Matheo Pauwels — Renew Netherlands",
-  "Maxence Bouhours — S&D Romania",
-  "Elleonore Nohan — The Left Spain",
   "Bartosz Szybiak — EPP Romania",
+  "Bibiana Shanks-Davison — ESN Bulgaria",
+  "Caterina Cavion — PfE Netherlands",
+  "Daniel Nunes — Greens Belgium",
+  "Darius Shahheydari — EPP Poland",
+  "Diana Georgiana Barău — S&D Sweden",
+  "Elodie Michel — PfE Hungary",
+  "Elleonore Nohan — The Left Spain",
+  "Eric Moraru — ESN Germany",
+  "Karina Lupas — S&D Spain",
+  "Luca Ciubotaru — PfE Italy",
+  "Matheo Pauwels — Renew Netherlands",
+  "Matthew Murnaghan — The Left Greece",
+  "Maxence Bouhours — S&D Romania",
   "Nikola Zak — S&D Denmark",
   "Nuno Costa — ECR Italy",
-  "Rodrigo Moreira — Renew France",
-  "Daniel Nunes — Greens Belgium",
-  "Vitor Andrade Andre — EPP Austria",
-  "Caterina Cavion — PfE Netherlands",
-  "Cătălin Gutium — PfE France",
-  "Nicoleta Patrasco — EPP Germany",
   "Priam Llalla — EPP Greece",
+  "Raluca Panaite — Renew Estonia",
+  "Rodrigo Moreira — Renew France",
   "Stefanjia Labroska — EPP Lithuania",
-  "Matthew Murnaghan — The Left Greece",
-  "Aleksandra Angelova — EPP Croatia",
-  "Bibiana Shanks-Davison — ESN Bulgaria",
-  "Ana Jovancic — EPP Ireland"
-].sort();
+  "Vitor Andrade Andre — EPP Austria",
+  "Viviana Eva Zaharia — S&D Portugal"
+];
 
+// 19 miniștri — ordine alfabetică
 const MINISTERS = [
-  "Marina Petrescu — Minister of Malta",
+  "Alexandru Butaru — Minister of Romania",
   "Andreea Potorac — Minister of Italy",
   "David Ionuț Dumitru — Minister of Hungary",
+  "Emma Guillen — Minister of Cyprus",
+  "Felix Moore — Minister of Portugal",
+  "Ferran Fuentes Romero — Minister of Croatia",
+  "Giuseppe de Vincenzo — Minister of Netherlands",
   "Jules Breant — Minister of Austria",
-  "Michalina Rosin — Minister of Germany",
-  "Maksymilian Machura — Minister of Belgium",
-  "Olaf Piasta — Minister of Greece",
-  "Mateusz Mielcarz — Minister of France",
-  "Sergio Perez Lopez — Minister of Finland",
+  "Leonardo Cutelle — Minister of Spain",
   "Llorenc Hinajeros Tejero — Minister of Lithuania",
   "Lorena Gomez Rubiato — Minister of Slovakia",
-  "Ferran Fuentes Romero — Minister of Croatia",
-  "Ruben Lopez Garcia — Minister of Bulgaria",
-  "Leonardo Cutelle — Minister of Spain",
-  "Giuseppe de Vincenzo — Minister of Netherlands",
+  "Maksymilian Machura — Minister of Belgium",
+  "Marina Petrescu — Minister of Malta",
+  "Mateusz Mielcarz — Minister of France",
+  "Michalina Rosin — Minister of Germany",
+  "Olaf Piasta — Minister of Greece",
   "Roberta Parrella — Minister of Poland",
-  "Felix Moore — Minister of Portugal"
-].sort();
+  "Ruben Lopez Garcia — Minister of Bulgaria",
+  "Sergio Perez Lopez — Minister of Finland"
+];
 
 const EP_GROUPS = ["EPP","S&D","Renew","Greens/EFA","ECR","PfE","The Left","ESN"];
 
-const SPECIAL_ROLES = [
-  "Daniel Tielas — President of EP",
-  "Miruna Cornescu — Vice-President of EP",
-  "Alexandru Butaru — VP of Council / Minister of Romania",
-  "Emma Guillen — President of Council / Minister of Cyprus",
-  "Letizia Bianchi — Commissioner",
-  "Timotej Pustaj — Commissioner",
-  "Raluca Constantinovici — Political Advisor",
-  "Albin Mixhati — Legal Advisor"
-];
-
 const DELEGATIONS = [
-  "România","Franța","Polonia","Portugalia","Spania",
-  "Italia","Moldova","Macedonia de Nord","Slovacia",
-  "Irlanda de Nord","Bulgaria","United Kingdom",
-  "Bosnia Herzegovina","Austria","Japonia"
-].sort();
-
-const PRESS = ["Alina Alexandru","Sawa Takahashi"];
+  "Austria","Bosnia Herzegovina","Bulgaria","France","Ireland",
+  "Italy","Japan","Moldova","North Macedonia","Poland",
+  "Portugal","Romania","Slovakia","Spain","United Kingdom"
+];
 
 // ── Questions definition ───────────────────────────────
 const QUESTIONS = [
